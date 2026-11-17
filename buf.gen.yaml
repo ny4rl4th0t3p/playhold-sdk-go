@@ -1,0 +1,12 @@
+version: v2
+# The protos name playhold's own package for their Go code; here it goes in this module's internal/wire.
+managed:
+  enabled: true
+  override:
+    - file_option: go_package
+      value: github.com/ny4rl4th0t3p/playhold-sdk-go/internal/wire;wire
+plugins:
+  - local: [ "go", "run", "google.golang.org/protobuf/cmd/protoc-gen-go@v1.36.12" ]
+    out: .
+    opt:
+      - module=github.com/ny4rl4th0t3p/playhold-sdk-go

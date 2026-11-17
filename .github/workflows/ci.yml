@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+      - run: make build
+      - run: make vet
+      - run: make test
+      - run: make vuln
+      - run: make pin
+      - name: Check generated code is up to date
+        run: |
+          make gen
+          git diff --exit-code
+      - uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.15.0
+      - uses: golangci/golangci-lint-action@v9
+        with:
+          version: v2.15.0
+          working-directory: testserver
+          args: --config ../.golangci.yml
