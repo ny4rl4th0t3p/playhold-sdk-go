@@ -1,8 +1,6 @@
-# The playhold versions this SDK is built for. The frames come from playhold's wire module, required in go.mod at
-# WIRE_VERSION; the tests run against testserver/, which requires playhold at PLAYHOLD_VERSION. At a release both are the
-# same v0.X.0 as the SDK's own; make pin checks the go.mod files say what these say.
-WIRE_VERSION := v0.4.0
-PLAYHOLD_VERSION := v0.3.0
+# The playhold version this SDK is built for, the same v0.X.0 as the SDK's own: go.mod requires playhold's wire module at
+# it, for the frames, and testserver/go.mod requires playhold at it, for the tests' server. make pin checks both.
+PLAYHOLD_VERSION := v0.4.0
 
 GOVULNCHECK_VERSION := v1.9.0
 
@@ -34,10 +32,10 @@ lint: ## Run golangci-lint on both modules
 vuln: ## Check dependencies and the standard library for known vulnerabilities
 	go run golang.org/x/vuln/cmd/govulncheck@$(GOVULNCHECK_VERSION) ./...
 
-pin: ## Check go.mod requires wire at WIRE_VERSION, and testserver/go.mod playhold at PLAYHOLD_VERSION
+pin: ## Check go.mod requires playhold/wire, and testserver/go.mod playhold, at PLAYHOLD_VERSION
 	@got=$$(go list -m -f '{{.Version}}' github.com/ny4rl4th0t3p/playhold/wire); \
-	if [ "$$got" != "$(WIRE_VERSION)" ]; then \
-		echo "go.mod requires playhold/wire $$got, but WIRE_VERSION is $(WIRE_VERSION)"; exit 1; \
+	if [ "$$got" != "$(PLAYHOLD_VERSION)" ]; then \
+		echo "go.mod requires playhold/wire $$got, but PLAYHOLD_VERSION is $(PLAYHOLD_VERSION)"; exit 1; \
 	fi
 	@got=$$(cd testserver && go list -m -f '{{.Version}}' github.com/ny4rl4th0t3p/playhold); \
 	if [ "$$got" != "$(PLAYHOLD_VERSION)" ]; then \

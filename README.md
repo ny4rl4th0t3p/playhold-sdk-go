@@ -6,7 +6,7 @@ minimal on purpose: it doesn't reconnect by itself, because a load test has to s
 > **Status: early development,** like playhold itself: the API can change between 0.x versions.
 
 ```bash
-go get github.com/ny4rl4th0t3p/playhold-sdk-go@v0.3.0
+go get github.com/ny4rl4th0t3p/playhold-sdk-go@v0.4.0
 ```
 
 ```go
@@ -35,8 +35,8 @@ make check   # build, vet, test, lint, vuln, and that both go.mod files require 
 make tidy    # tidy both modules
 ```
 
-To move to a new playhold version: change `WIRE_VERSION` and `PLAYHOLD_VERSION` in the `Makefile`, require the same
-versions in `go.mod` and `testserver/go.mod`, then `make tidy check`.
+To move to a new playhold version: change `PLAYHOLD_VERSION` in the `Makefile`, require playhold's `wire` module at it
+in `go.mod` and playhold at it in `testserver/go.mod`, then `make tidy check`.
 
 ## License
 
