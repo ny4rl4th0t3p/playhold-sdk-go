@@ -6,7 +6,7 @@ minimal on purpose: it doesn't reconnect by itself, because a load test has to s
 > **Status: early development,** like playhold itself: the API can change between 0.x versions.
 
 ```bash
-go get github.com/ny4rl4th0t3p/playhold-sdk-go@v0.4.0
+go get github.com/ny4rl4th0t3p/playhold-sdk-go@v0.4.1
 ```
 
 ```go

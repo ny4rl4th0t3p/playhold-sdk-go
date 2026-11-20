@@ -44,13 +44,17 @@ const (
 	ErrorRoomNotFound        = wire.ErrorCode_ERROR_CODE_ROOM_NOT_FOUND
 )
 
-// Error is a problem the server reported. Seq is the number of the frame it's about.
+// Error is a problem the server reported.
 type Error struct {
-	Seq     uint64
-	Code    ErrorCode
+	// Seq is the number of the frame it's about. For a message, it's the number Send returned.
+	Seq uint64
+	// Code says what kind of problem it is, such as ErrorRoomFull.
+	Code ErrorCode
+	// Message is the server's description, such as a handler's error text.
 	Message string
 }
 
+// Error returns the code and the server's description.
 func (e *Error) Error() string {
 	return fmt.Sprintf("playhold: %s: %s", e.Code, e.Message)
 }
@@ -130,9 +134,10 @@ func (c *Client) hello(ctx context.Context, versions map[string]uint32) error {
 // Identity returns who this client is, which is what to keep for connecting again.
 func (c *Client) Identity() Identity { return c.identity }
 
-// Join enters the room with this code, and waits for the answer. It returns an *Error if the room refuses this player,
-// or with ErrorRoomNotFound if no room has the code and the server doesn't create rooms from codes clients choose. Asked
-// to try again, with ErrorUnavailable or ErrorRateLimited, wait, connect again and repeat.
+// Join enters the room with this code, and waits for the answer. It returns an *Error if the room refuses this player:
+// ErrorRoomNotFound, for one, if no room has the code and the server doesn't create rooms from codes clients choose. It
+// returns ErrRoomClosed, wrapped with the reason, if the room closes before the answer. Asked to try again, with
+// ErrorUnavailable or ErrorRateLimited, wait, connect again and repeat.
 func (c *Client) Join(ctx context.Context, code string) error {
 	_, err := c.join(ctx, code)
 	return err
